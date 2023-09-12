@@ -1,0 +1,76 @@
+<html>
+<head>
+<title>LogIn.kt</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cc7832;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #808080;}
+.s3 { color: #6a8759;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+LogIn.kt</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">com.example.chatapplication</span>
+
+<span class="s1">import android.content.Intent</span>
+<span class="s1">import androidx.appcompat.app.AppCompatActivity</span>
+<span class="s1">import android.os.Bundle</span>
+<span class="s1">import android.widget.Button</span>
+<span class="s1">import android.widget.EditText</span>
+<span class="s1">import android.widget.Toast</span>
+<span class="s1">import com.google.firebase.auth.FirebaseAuth</span>
+
+<span class="s0">class </span><span class="s1">LogIn : AppCompatActivity() {</span>
+
+    <span class="s1">private lateinit </span><span class="s0">var </span><span class="s1">edtEmail: EditText</span>
+    <span class="s1">private lateinit </span><span class="s0">var </span><span class="s1">edtPassword: EditText</span>
+    <span class="s1">private lateinit </span><span class="s0">var </span><span class="s1">btnLogin: Button</span>
+    <span class="s1">private lateinit </span><span class="s0">var </span><span class="s1">btnSignUp: Button</span>
+    <span class="s1">private lateinit </span><span class="s0">var </span><span class="s1">mAuth:FirebaseAuth</span>
+
+    <span class="s1">override </span><span class="s0">fun </span><span class="s1">onCreate(savedInstanceState: Bundle?) {</span>
+        <span class="s0">super</span><span class="s1">.onCreate(savedInstanceState)</span>
+        <span class="s1">setContentView(R.layout.activity_log_in)</span>
+
+        <span class="s1">supportActionBar?.hide()</span>
+        
+        <span class="s1">mAuth = FirebaseAuth.getInstance()</span>
+
+        <span class="s1">edtEmail = findViewById(R.id.edit_email)</span>
+        <span class="s1">edtPassword = findViewById(R.id.edit_password)</span>
+        <span class="s1">btnLogin = findViewById(R.id.btnLogin)</span>
+        <span class="s1">btnSignUp = findViewById(R.id.btnSignUp)</span>
+
+        <span class="s1">btnSignUp.setOnClickListener{</span>
+            <span class="s0">val </span><span class="s1">intent = Intent(</span><span class="s0">this,</span><span class="s1">SignUp::</span><span class="s0">class</span><span class="s1">.java)</span>
+            <span class="s1">startActivity(intent)</span>
+        <span class="s1">}</span>
+        <span class="s1">btnLogin.setOnClickListener { </span>
+            <span class="s0">val </span><span class="s1">email = edtEmail.text.toString()</span>
+            <span class="s0">val </span><span class="s1">password = edtPassword.text.toString()</span>
+            
+            <span class="s1">login(email</span><span class="s0">,</span><span class="s1">password)</span>
+        <span class="s1">}</span>
+    <span class="s1">}</span>
+    <span class="s1">private </span><span class="s0">fun </span><span class="s1">login (email: String</span><span class="s0">, </span><span class="s1">password: String){</span>
+        <span class="s1">mAuth.signInWithEmailAndPassword(email</span><span class="s0">,</span><span class="s1">password)</span>
+            <span class="s1">.addOnCompleteListener(</span><span class="s0">this</span><span class="s1">){task -&gt;</span>
+                <span class="s0">if</span><span class="s1">(task.isSuccessful){</span>
+                    <span class="s2">//code for</span>
+                    <span class="s0">val </span><span class="s1">intent = Intent(</span><span class="s0">this</span><span class="s1">@LogIn</span><span class="s0">, </span><span class="s1">MainActivity::</span><span class="s0">class</span><span class="s1">.java)</span>
+                    <span class="s1">finish()</span>
+                    <span class="s1">startActivity(intent)</span>
+                <span class="s1">}</span><span class="s0">else</span><span class="s1">{</span>
+                    <span class="s1">Toast.makeText(</span><span class="s0">this</span><span class="s1">@LogIn</span><span class="s0">,</span><span class="s3">&quot;User does not exist&quot;</span><span class="s0">, </span><span class="s1">Toast.LENGTH_LONG).show()</span>
+                <span class="s1">}</span>
+            <span class="s1">}</span>
+    <span class="s1">}</span>
+<span class="s1">}</span>
+</pre>
+</body>
+</html>

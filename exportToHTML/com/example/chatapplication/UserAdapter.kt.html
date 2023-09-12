@@ -1,0 +1,64 @@
+<html>
+<head>
+<title>UserAdapter.kt</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cc7832;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #6a8759;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+UserAdapter.kt</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">com.example.chatapplication</span>
+
+<span class="s1">import android.content.Context</span>
+<span class="s1">import android.content.Intent</span>
+<span class="s1">import android.view.LayoutInflater</span>
+<span class="s1">import android.view.View</span>
+<span class="s1">import android.view.ViewGroup</span>
+<span class="s1">import android.widget.TextView</span>
+<span class="s1">import androidx.recyclerview.widget.RecyclerView</span>
+<span class="s1">import com.google.firebase.auth.FirebaseAuth</span>
+<span class="s1">import com.google.firebase.ktx.Firebase</span>
+
+<span class="s0">class </span><span class="s1">UserAdapter(</span><span class="s0">val </span><span class="s1">context:Context</span><span class="s0">, val </span><span class="s1">userList: ArrayList&lt;User&gt;):</span>
+    <span class="s1">RecyclerView.Adapter&lt;UserAdapter.UserViewHolder&gt;() {</span>
+
+
+    <span class="s1">override </span><span class="s0">fun </span><span class="s1">onCreateViewHolder(parent: ViewGroup</span><span class="s0">, </span><span class="s1">viewType: Int): UserViewHolder {</span>
+        <span class="s0">val </span><span class="s1">view: View = LayoutInflater.from(context).inflate(R.layout.user_layout</span><span class="s0">,</span><span class="s1">parent</span><span class="s0">,false</span><span class="s1">)</span>
+        <span class="s0">return </span><span class="s1">UserViewHolder(view)</span>
+    <span class="s1">}</span>
+
+    <span class="s1">override </span><span class="s0">fun </span><span class="s1">onBindViewHolder(holder: UserViewHolder</span><span class="s0">, </span><span class="s1">position: Int) {</span>
+        <span class="s0">val </span><span class="s1">currentUser = userList[position]</span>
+
+        <span class="s1">holder.textName.text =  currentUser.name</span>
+
+        <span class="s1">holder.itemView.setOnClickListener{</span>
+            <span class="s0">val </span><span class="s1">intent = Intent(context</span><span class="s0">,</span><span class="s1">ChatActivity::</span><span class="s0">class</span><span class="s1">.java)</span>
+
+            <span class="s1">intent.putExtra(</span><span class="s2">&quot;name&quot;</span><span class="s0">,</span><span class="s1">currentUser.name)</span>
+            <span class="s1">intent.putExtra(</span><span class="s2">&quot;uid&quot;</span><span class="s0">,</span><span class="s1">currentUser.uid)</span>
+
+            <span class="s1">context.startActivity(intent)</span>
+        <span class="s1">}</span>
+
+    <span class="s1">}</span>
+
+    <span class="s1">override </span><span class="s0">fun </span><span class="s1">getItemCount(): Int {</span>
+        <span class="s0">return </span><span class="s1">userList.size</span>
+
+    <span class="s1">}</span>
+    <span class="s0">class </span><span class="s1">UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){</span>
+        <span class="s0">val </span><span class="s1">textName = itemView.findViewById&lt;TextView&gt;(R.id.text_name)</span>
+
+    <span class="s1">}</span>
+<span class="s1">}</span></pre>
+</body>
+</html>

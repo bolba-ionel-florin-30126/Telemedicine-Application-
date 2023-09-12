@@ -1,0 +1,107 @@
+<html>
+<head>
+<title>ChatActivity.kt</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cc7832;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #6a8759;}
+.s3 { color: #808080;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+ChatActivity.kt</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">com.example.chatapplication</span>
+
+<span class="s1">import android.annotation.SuppressLint</span>
+<span class="s1">import android.content.Intent</span>
+<span class="s1">import androidx.appcompat.app.AppCompatActivity</span>
+<span class="s1">import android.os.Bundle</span>
+<span class="s1">import android.widget.EditText</span>
+<span class="s1">import android.widget.ImageView</span>
+<span class="s1">import androidx.recyclerview.widget.LinearLayoutManager</span>
+<span class="s1">import androidx.recyclerview.widget.RecyclerView</span>
+<span class="s1">import com.google.firebase.auth.FirebaseAuth</span>
+<span class="s1">import com.google.firebase.database.*</span>
+
+<span class="s0">class </span><span class="s1">ChatActivity : AppCompatActivity() {</span>
+    <span class="s1">private lateinit </span><span class="s0">var </span><span class="s1">chatRecyclerView: RecyclerView</span>
+    <span class="s1">private lateinit </span><span class="s0">var </span><span class="s1">messageBox: EditText</span>
+    <span class="s1">private lateinit </span><span class="s0">var </span><span class="s1">sendButton: ImageView</span>
+    <span class="s1">private lateinit </span><span class="s0">var </span><span class="s1">messageAdapter: MessageAdapter</span>
+    <span class="s1">private lateinit </span><span class="s0">var </span><span class="s1">messageLint: ArrayList&lt;Message&gt;</span>
+    <span class="s1">private lateinit </span><span class="s0">var </span><span class="s1">mDbRef: DatabaseReference</span>
+
+    <span class="s0">var </span><span class="s1">receiveRoom: String? = </span><span class="s0">null</span>
+    <span class="s0">var </span><span class="s1">senderRoom: String? = </span><span class="s0">null</span>
+
+    <span class="s1">@SuppressLint(</span><span class="s2">&quot;MissingInflatedId&quot;</span><span class="s1">)</span>
+    <span class="s1">override </span><span class="s0">fun </span><span class="s1">onCreate(savedInstanceState: Bundle?) {</span>
+        <span class="s0">super</span><span class="s1">.onCreate(savedInstanceState)</span>
+        <span class="s1">setContentView(R.layout.activity_chat)</span>
+
+
+        <span class="s0">val </span><span class="s1">name = intent.getStringExtra(</span><span class="s2">&quot;name&quot;</span><span class="s1">)</span>
+        <span class="s0">val </span><span class="s1">receiverUid = intent.getStringExtra(</span><span class="s2">&quot;uid&quot;</span><span class="s1">)</span>
+
+        <span class="s0">val </span><span class="s1">senderUid = FirebaseAuth.getInstance().currentUser?.uid</span>
+        <span class="s1">mDbRef = FirebaseDatabase.getInstance().getReference()</span>
+
+        <span class="s1">senderRoom = receiverUid + senderUid</span>
+        <span class="s1">receiveRoom = senderUid + receiverUid</span>
+
+        <span class="s1">supportActionBar?.title = name</span>
+
+        <span class="s1">chatRecyclerView = findViewById(R.id.chatRecyclerView)</span>
+        <span class="s1">messageBox = findViewById(R.id.messageBox)</span>
+        <span class="s1">sendButton = findViewById(R.id.sentButton)</span>
+        <span class="s1">messageLint = ArrayList()</span>
+        <span class="s1">messageAdapter = MessageAdapter(</span><span class="s0">this,</span><span class="s1">messageLint)</span>
+
+        <span class="s1">chatRecyclerView.layoutManager = LinearLayoutManager(</span><span class="s0">this</span><span class="s1">)</span>
+        <span class="s1">chatRecyclerView.adapter = messageAdapter</span>
+
+        <span class="s3">//logic for adding data to recyclerview</span>
+        <span class="s1">mDbRef.child(</span><span class="s2">&quot;chats&quot;</span><span class="s1">).child(senderRoom!!).child(</span><span class="s2">&quot;messages&quot;</span><span class="s1">)</span>
+            <span class="s1">.addValueEventListener(</span><span class="s0">object </span><span class="s1">: ValueEventListener{</span>
+                <span class="s1">override </span><span class="s0">fun </span><span class="s1">onDataChange(snapshot: DataSnapshot) {</span>
+
+                    <span class="s1">messageLint.clear()</span>
+
+                  <span class="s0">for</span><span class="s1">(postSnapshort </span><span class="s0">in </span><span class="s1">snapshot.children){</span>
+
+                      <span class="s0">val </span><span class="s1">message = postSnapshort.getValue(Message::</span><span class="s0">class</span><span class="s1">.java)</span>
+                      <span class="s1">messageLint.add(message!!)</span>
+
+                  <span class="s1">}</span>
+
+                    <span class="s1">messageAdapter.notifyDataSetChanged()</span>
+                <span class="s1">}</span>
+
+                <span class="s1">override </span><span class="s0">fun </span><span class="s1">onCancelled(error: DatabaseError) {</span>
+
+                <span class="s1">}</span>
+
+            <span class="s1">})</span>
+
+        <span class="s3">//  adding the message to database</span>
+        <span class="s1">sendButton.setOnClickListener{</span>
+
+            <span class="s0">val </span><span class="s1">message = messageBox.text.toString()</span>
+            <span class="s0">val </span><span class="s1">messageObject = Message(message</span><span class="s0">,</span><span class="s1">senderUid)</span>
+
+            <span class="s1">mDbRef.child(</span><span class="s2">&quot;chats&quot;</span><span class="s1">).child(senderRoom!!).child(</span><span class="s2">&quot;messages&quot;</span><span class="s1">).push()</span>
+                <span class="s1">.setValue(messageObject).addOnSuccessListener {</span>
+                    <span class="s1">mDbRef.child(</span><span class="s2">&quot;chats&quot;</span><span class="s1">).child(receiveRoom!!).child(</span><span class="s2">&quot;messages&quot;</span><span class="s1">).push()</span>
+                        <span class="s1">.setValue(messageObject)</span>
+                <span class="s1">}</span>
+            <span class="s1">messageBox.setText(</span><span class="s2">&quot;&quot;</span><span class="s1">)</span>
+        <span class="s1">}</span>
+    <span class="s1">}</span>
+<span class="s1">}</span></pre>
+</body>
+</html>

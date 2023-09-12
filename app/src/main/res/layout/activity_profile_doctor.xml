@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".doctors.ProfileDoctorActivity">
+
+    <ImageView
+        android:id="@+id/profile_photo"
+        android:src="@drawable/ic_baseline_person_24"
+        android:layout_width="match_parent"
+        android:layout_height="200dp" />
+
+    <Button
+        android:id="@+id/button_log_out"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/profile_photo"
+        android:text="Logout"
+        android:textSize="20sp"
+        android:textColor="@color/white"
+        android:background="@drawable/btn_background"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:focusable="true" />
+
+    <Button
+        android:id="@+id/button_delete_account"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/button_log_out"
+        android:text="Delete account"
+        android:textSize="20sp"
+        android:textColor="@color/white"
+        android:background="@drawable/btn_background"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:focusable="true" />
+
+</RelativeLayout>

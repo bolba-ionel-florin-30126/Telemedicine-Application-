@@ -1,0 +1,99 @@
+<html>
+<head>
+<title>MessageAdapter.kt</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cc7832;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #6897bb;}
+.s3 { color: #808080;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+MessageAdapter.kt</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">com.example.chatapplication</span>
+
+<span class="s1">import android.content.Context</span>
+<span class="s1">import android.provider.Telephony.Mms.Sent</span>
+<span class="s1">import android.view.LayoutInflater</span>
+<span class="s1">import android.view.TextureView</span>
+<span class="s1">import android.view.View</span>
+<span class="s1">import android.view.ViewGroup</span>
+<span class="s1">import android.widget.TextView</span>
+<span class="s1">import androidx.recyclerview.widget.RecyclerView</span>
+<span class="s1">import androidx.recyclerview.widget.RecyclerView.ViewHolder</span>
+<span class="s1">import com.google.firebase.auth.FirebaseAuth</span>
+
+<span class="s0">class </span><span class="s1">MessageAdapter(</span><span class="s0">val </span><span class="s1">context: Context</span><span class="s0">, val </span><span class="s1">messageList: ArrayList&lt;Message&gt;):</span>
+    <span class="s1">RecyclerView.Adapter&lt;RecyclerView.ViewHolder&gt;() {</span>
+
+    <span class="s0">val </span><span class="s1">ITEM_RECEIVE =</span><span class="s2">1</span>
+    <span class="s0">val </span><span class="s1">ITEM_SENT =</span><span class="s2">2</span>
+
+
+    <span class="s1">override </span><span class="s0">fun </span><span class="s1">onCreateViewHolder(parent: ViewGroup</span><span class="s0">, </span><span class="s1">viewType: Int): ViewHolder {</span>
+
+        <span class="s0">if</span><span class="s1">(viewType == </span><span class="s2">1</span><span class="s1">){</span>
+            <span class="s3">//inflate receive</span>
+            <span class="s0">val </span><span class="s1">view: View = LayoutInflater.from(context).inflate(R.layout.receive</span><span class="s0">,</span><span class="s1">parent</span><span class="s0">,false</span><span class="s1">)</span>
+            <span class="s0">return </span><span class="s1">ReceiveViewHolder(view)</span>
+
+        <span class="s1">}</span><span class="s0">else</span>
+        <span class="s1">{</span>
+            <span class="s3">//inflate sent</span>
+            <span class="s0">val </span><span class="s1">view: View = LayoutInflater.from(context).inflate(R.layout.sent</span><span class="s0">,</span><span class="s1">parent</span><span class="s0">,false</span><span class="s1">)</span>
+            <span class="s0">return </span><span class="s1">SentViewHolder(view)</span>
+        <span class="s1">}</span>
+
+    <span class="s1">}</span>
+
+    <span class="s1">override </span><span class="s0">fun </span><span class="s1">onBindViewHolder(holder: ViewHolder</span><span class="s0">, </span><span class="s1">position: Int) {</span>
+
+        <span class="s0">val </span><span class="s1">currentMessage = messageList[position]</span>
+
+        <span class="s0">if</span><span class="s1">(holder.javaClass == SentViewHolder::</span><span class="s0">class</span><span class="s1">.java){</span>
+            <span class="s3">//do the stuff for sent view holdrer</span>
+
+
+            <span class="s0">val </span><span class="s1">viewHolder = holder </span><span class="s0">as </span><span class="s1">SentViewHolder</span>
+            <span class="s1">holder.sentMessage.text =  currentMessage.message</span>
+        <span class="s1">}</span><span class="s0">else</span><span class="s1">{</span>
+            <span class="s3">// to do stuff for receive view holder</span>
+            <span class="s0">val </span><span class="s1">viewHolder = holder </span><span class="s0">as </span><span class="s1">ReceiveViewHolder</span>
+            <span class="s1">holder.receiveMessage.text = currentMessage.message</span>
+        <span class="s1">}</span>
+
+    <span class="s1">}</span>
+
+    <span class="s1">override </span><span class="s0">fun </span><span class="s1">getItemViewType(position: Int): Int {</span>
+
+        <span class="s0">val </span><span class="s1">currentMessage = messageList[position]</span>
+
+        <span class="s0">if</span><span class="s1">(FirebaseAuth.getInstance().currentUser?.uid.equals(currentMessage.senderId)){</span>
+            <span class="s0">return </span><span class="s1">ITEM_SENT</span>
+        <span class="s1">}</span><span class="s0">else</span><span class="s1">{</span>
+            <span class="s0">return </span><span class="s1">ITEM_RECEIVE</span>
+        <span class="s1">}</span>
+    <span class="s1">}</span>
+
+    <span class="s1">override </span><span class="s0">fun </span><span class="s1">getItemCount(): Int {</span>
+        <span class="s0">return </span><span class="s1">messageList.size</span>
+
+    <span class="s1">}</span>
+
+    <span class="s0">class </span><span class="s1">SentViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {</span>
+        <span class="s0">val </span><span class="s1">sentMessage = itemView.findViewById&lt;TextView&gt;(R.id.txt_sent_message)</span>
+
+    <span class="s1">}</span>
+
+    <span class="s0">class </span><span class="s1">ReceiveViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {</span>
+        <span class="s0">val </span><span class="s1">receiveMessage = itemView.findViewById&lt;TextView&gt;(R.id.txt_receive_message)</span>
+
+    <span class="s1">}</span>
+<span class="s1">}</span></pre>
+</body>
+</html>

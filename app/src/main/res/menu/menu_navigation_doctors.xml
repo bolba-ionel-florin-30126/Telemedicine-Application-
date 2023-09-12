@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/chat_doctors"
+        android:title="Chats"
+        app:cnb_iconColor="@color/white"
+        android:icon="@drawable/ic_baseline_chat_24"/>
+    <item
+        android:id="@+id/profile_doctors"
+        android:title="Profile"
+        app:cnb_iconColor="@color/white"
+        android:icon="@drawable/ic_baseline_person"/>
+    <item
+        android:id="@+id/map"
+        android:title="Map"
+        app:cnb_iconColor="@color/white"
+        android:icon="@drawable/ic_baseline_map_24"/>
+    <item
+        android:id="@+id/info_doctors"
+        android:title="Info"
+        app:cnb_iconColor="@color/white"
+        android:icon="@drawable/ic_baseline_info_24"/>
+</menu>
